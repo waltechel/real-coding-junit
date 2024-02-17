@@ -1,4 +1,4 @@
-package com.realcoding.junit.ch01;
+package com.realcoding.junit;
 
 import org.junit.jupiter.api.Test;                      // JUnit 5를 사용하고 있으므로 org.junit.jupiter 패키지의 Test 사용
 
@@ -18,6 +18,13 @@ class CalculatorTest {                                  // 테스트 클래스�
         Calculator calculator = new Calculator();
         double result = calculator.subtract(50, 10);
         assertEquals(40, result, 0);
+    }
+
+    @Test
+    void multiply() {                                   // JUnit 5에서는 테스트 메서드 앞에 test 라는 접두사를 붙일 필요가 없다
+        Calculator calculator = new Calculator();
+        double result = calculator.multiply(50, 10);
+        assertEquals(500, result, 0);
     }
 
     @Test

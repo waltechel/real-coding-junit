@@ -19,7 +19,7 @@
  * ========================================================================
  */
 
-package com.realcoding.junit.ch01;
+package com.realcoding.junit;
 
 public class Calculator {
     public double add(double number1, double number2) {
@@ -30,8 +30,20 @@ public class Calculator {
         return number1 - number2;
     }
 
+    public double multiply(double number1, double number2) {
+        return number1 * number2;
+    }
+
     public double divide(double number1, double number2) {
+        if (number2 == 0) {
+            throw new RuntimeException("cannot be divided by zero.");
+        }
         return number1 / number2;
+    }
+
+    // TODO : 기능이 아직 개발중
+    public double sqrt(double number) {
+        return 0;
     }
 
 }

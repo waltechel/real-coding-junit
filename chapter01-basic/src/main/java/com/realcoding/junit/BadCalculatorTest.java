@@ -19,7 +19,7 @@
  * ========================================================================
  */
 
-package com.realcoding.junit.ch01;
+package com.realcoding.junit;
 
 public class BadCalculatorTest {
 
@@ -34,10 +34,15 @@ public class BadCalculatorTest {
             if (ret2 != 40) {
                 throw new RuntimeException("calculator subtract has a problem");
             }
-            double ret3 = calculator.divide(50, 3);                               // 앞선 메서드가 실패했을 때 실행되지 않는다(앞 테스트 결과에 영향을 받는다).
-            if (16.6 - ret3 < 0.1) {
+            double ret3 = calculator.multiply(50, 10);                               // 앞선 메서드가 실패했을 때 실행되지 않는다(앞 테스트 결과에 영향을 받는다).
+            if (ret3 != 500) {
+                throw new RuntimeException("calculator multiply has a problem");
+            }
+            double ret4 = calculator.divide(50, 3);                               // 앞선 메서드가 실패했을 때 실행되지 않는다(앞 테스트 결과에 영향을 받는다).
+            if (Math.abs(16.6 - ret4) > 0.1) {
                 throw new RuntimeException("calculator divide has a problem");
             }
+            double ret5 = calculator.divide(50, 0);                             // 이건 어떻게 검증할까?
         } catch (Exception e) {
             e.printStackTrace();
         }
