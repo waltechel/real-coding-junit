@@ -2,6 +2,8 @@ package com.realcoding.chapter02.api.flight.service.logic.impl;
 
 import com.realcoding.chapter02.api.common.code.ApplicationConstants;
 import com.realcoding.chapter02.api.common.code.DomainEnum;
+import com.realcoding.chapter02.api.common.exception.CustomException;
+import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.common.util.RCIdGenerator;
 import com.realcoding.chapter02.api.flight.persistence.dao.FlightDao;
 import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
@@ -66,7 +68,7 @@ public class FlightServiceImpl implements FlightService {
     public int deleteFlightList(List<String> flightIds) {
         int ret = flightDao.updateAsDeletedByFlightIds(flightIds);
         if (ret != flightIds.size()) {
-            throw new RuntimeException("정상적으로 삭제되지 않은 항공편이 있습니다.");
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "정상적으로 삭제되지 않은 항공편이 있습니다.");
         }
         return ret;
     }

@@ -1,5 +1,7 @@
 package com.realcoding.chapter02.api.flight.presentation.validator;
 
+import com.realcoding.chapter02.api.common.exception.CustomException;
+import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.flight.persistence.dao.FlightDao;
 import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
 import com.realcoding.chapter02.api.flight.presentation.dto.in.FlightCreateRequest;
@@ -47,7 +49,7 @@ public class FlightValidator {
     private void setFlightName(FlightSO flightSO, String flightName) {
         Matcher matcher = pattern.matcher(flightName);
         if (!matcher.matches()) {
-            throw new RuntimeException("항공편명이 적절하지 않습니다");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "항공편명이 적절하지 않습니다");
         }
         flightSO.setFlightName(flightName);
     }
@@ -63,30 +65,30 @@ public class FlightValidator {
 
     private static void nullcheck(FlightCreateRequestDetail flightCreateRequestDetail) {
         if (StringUtils.isEmpty(flightCreateRequestDetail.getFlightName())) {
-            throw new RuntimeException("항공편명이 없습니다.");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "항공편명이 없습니다.");
         }
         if (StringUtils.isEmpty(flightCreateRequestDetail.getSourceName())) {
-            throw new RuntimeException("출발국가명이 없습니다.");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "출발국가명이 없습니다.");
         }
         if (StringUtils.isEmpty(flightCreateRequestDetail.getTargetName())) {
-            throw new RuntimeException("도착국가명이 없습니다.");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "도착국가명이 없습니다.");
         }
     }
 
     public List<String> deleteRequestValidate(FlightDeleteRequest flightDeleteRequest) {
         if (CollectionUtils.isEmpty(flightDeleteRequest.getFlightIds())) {
-            throw new RuntimeException("삭제할 항공편 아이디가 없습니다.");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "삭제할 항공편 아이디가 없습니다.");
         }
         for (String flightId : flightDeleteRequest.getFlightIds()) {
             if (StringUtils.isEmpty(flightId)) {
-                throw new RuntimeException("삭제할 항공편 아이디가 없습니다.");
+                throw new CustomException(ErrorCode.BAD_REQUEST, "삭제할 항공편 아이디가 없습니다.");
             }
         }
         List<String> flightIds = flightDeleteRequest.getFlightIds();
 
         List<FlightEntity> flightEntityList = flightDao.getListAllFlightByFlightIds(flightIds);
         if(flightEntityList.size() != flightIds.size()){
-            throw new RuntimeException("적절하지 않은 항공편 아이디가 있습니다");
+            throw new CustomException(ErrorCode.BAD_REQUEST, "적절하지 않은 항공편 아이디가 있습니다");
         }
         return flightIds;
     }

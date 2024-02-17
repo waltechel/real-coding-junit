@@ -1,5 +1,7 @@
 package com.realcoding.chapter02.api.flight.persistence.dao.impl;
 
+import com.realcoding.chapter02.api.common.exception.CustomException;
+import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.flight.persistence.dao.FlightDao;
 import com.realcoding.chapter02.api.flight.persistence.dao.mapper.FlightRowMapper;
 import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
@@ -66,6 +68,7 @@ public class FlightDaoImpl implements FlightDao {
             flightEntity = namedParameterJdbcTemplate.queryForObject(GET_FLIGHT_BY_FLIGHT_ID_SQL, parameters, FLIGHT_ROW_MAPPER);
         } catch (RuntimeException re) {
             log.error("FlightDaoImpl > getListAllFlight has error!", re);
+            throw new CustomException(ErrorCode.NOT_FOUND, "항공편 정보를 찾을 수 없습니다.");
         }
         return flightEntity;
     }
