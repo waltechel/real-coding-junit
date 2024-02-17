@@ -14,3 +14,20 @@ CREATE TABLE rc_flight (
     modified_by varchar(200) NOT NULL,
     CONSTRAINT rc_flight_pkey PRIMARY KEY(flight_id)
 );
+
+-- noinspection SqlNoDataSourceInspectionForFile
+-- noinspection SqlDialectInspectionForFile
+DROP TABLE IF EXISTS rc_passenger;
+
+CREATE TABLE rc_passenger (
+    passenger_id varchar(200) NOT NULL,
+    passenger_rrn varchar(200) NOT NULL,
+    name varchar(200) NOT NULL,
+    status varchar(200) NOT NULL,
+    type varchar(200) NOT NULL,
+    created_dt timestamp NOT NULL,
+    created_by varchar(200) NOT NULL,
+    modified_dt timestamp NOT NULL,
+    modified_by varchar(200) NOT NULL,
+    CONSTRAINT rc_passenger_pkey PRIMARY KEY(passenger_id)
+);
