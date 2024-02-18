@@ -32,3 +32,21 @@ CREATE TABLE rc_passenger (
     modified_by varchar(200) NULL,
     CONSTRAINT rc_passenger_pkey PRIMARY KEY(passenger_id)
 );
+
+-- noinspection SqlNoDataSourceInspectionForFile
+-- noinspection SqlDialectInspectionForFile
+DROP TABLE IF EXISTS rc_travel;
+
+CREATE TABLE rc_travel (
+    travel_id varchar(200) NOT NULL,
+    flight_id varchar(200) NOT NULL,
+    passenger_id varchar(200) NOT NULL,
+    status varchar(200) NULL,
+    created_dt timestamp NULL,
+    created_by varchar(200) NULL,
+    modified_dt timestamp NULL,
+    modified_by varchar(200) NULL,
+    CONSTRAINT rc_travel_pkey PRIMARY KEY(travel_id),
+    CONSTRAINT fk_travel_flight FOREIGN KEY(flight_id) REFERENCES rc_flight(flight_id),
+    CONSTRAINT fk_travel_passenger FOREIGN KEY(passenger_id) REFERENCES rc_passenger(passenger_id)
+);
