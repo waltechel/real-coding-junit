@@ -12,7 +12,7 @@ public interface PassengerService {
 
     PassengerSO updatePassengerType(String passengerId, String type);
 
-    void deletePassenger(List<String> passengerIds);
+    int deletePassenger(List<String> passengerIds);
 
     List<PassengerSO> createPassengerList(PassengerCreateRequestSO passengerCreateRequestSO);
 }

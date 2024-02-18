@@ -28,3 +28,8 @@ mybatis:
 
 hibernate:
   dialect: org.hibernate.dialect.H2Dialect
+
+passenger:
+  types:
+    - "REGULAR"
+    - "VIP"

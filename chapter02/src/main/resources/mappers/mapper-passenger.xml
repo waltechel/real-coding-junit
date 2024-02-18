@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.realcoding.chapter02.api.passenger.persistence.repository.PassengerRepository">
+
+    <!-- 모든 승객 조회 -->
+    <select id="getAllPassengers"
+            resultType="com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity">
+        SELECT * FROM rc_passenger WHERE status != 'DELETED'
+    </select>
+
+    <!-- 특정 ID의 승객 조회 -->
+    <select id="getPassengerById" parameterType="String"
+            resultType="com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity">
+        SELECT * FROM rc_passenger WHERE status != 'DELETED' and passenger_id = #{passengerId}
+    </select>
+
+    <!-- 승객 목록 저장 -->
+    <insert id="saveAllPassengerList" parameterType="List">
+        INSERT INTO rc_passenger (passenger_id,
+        passenger_rrn,
+        name,
+        status,
+        type,
+        created_dt,
+        created_by,
+        modified_dt,
+        modified_by)
+        VALUES
+        <foreach collection="list" item="passenger" separator=",">
+            (#{passenger.passengerId},
+            #{passenger.passengerRRN},
+            #{passenger.name},
+            #{passenger.status},
+            #{passenger.type},
+            #{passenger.createdDt},
+            #{passenger.createdBy},
+            #{passenger.modifiedDt},
+            #{passenger.modifiedBy})
+        </foreach>
+    </insert>
+
+    <!-- 특정 ID 목록에 속하는 승객 조회 -->
+    <select id="getAllPassengersByPassengerIds" parameterType="List"
+            resultType="com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity">
+        SELECT * FROM rc_passenger
+        WHERE passenger_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 특정 승객의 타입 업데이트 -->
+    <update id="updatePassengerType">
+        UPDATE rc_passenger
+        SET type = #{type}
+        WHERE passenger_id = #{passengerId}
+    </update>
+
+    <!-- 특정 ID 목록에 속하는 승객의 상태를 'DELETED'로 업데이트 -->
+    <update id="updateAsDeletedByPassengerIds" parameterType="List">
+        UPDATE rc_passenger
+        SET status = 'DELETED'
+        WHERE passenger_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!-- 특정 ID 목록에 속하는 승객 조회 -->
+    <select id="getListAllPassengersByPassengerIds" parameterType="List"
+            resultType="com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity">
+        SELECT * FROM rc_passenger
+        WHERE status != 'DELETED'
+        AND passenger_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>
