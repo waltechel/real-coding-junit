@@ -14,5 +14,6 @@ public class FlightCreateRequestDetail {
     private String flightName;
     private String sourceName;
     private String targetName;
+    private String type;
 
 }

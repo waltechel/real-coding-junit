@@ -1,5 +1,6 @@
 package com.realcoding.chapter02.api.flight.presentation.validator;
 
+import com.realcoding.chapter02.api.common.config.FlightConfig;
 import com.realcoding.chapter02.api.common.exception.CustomException;
 import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.flight.persistence.dao.FlightDao;
@@ -17,8 +18,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class FlightValidator {
     private static final String VALID_FLIGHT_NAME_REGEX = "^[A-Z]{2}\\d{3,4}$"; // 항공편명은 대문자 영문 2자와 숫자 3~4자로 구성되어 있다.
     private static final Pattern pattern = Pattern.compile(VALID_FLIGHT_NAME_REGEX);
     private final FlightDao flightDao;
+    private final FlightConfig flightConfig;
 
     public FlightCreateRequestSO createRequestValidate(FlightCreateRequest flightCreateRequest) {
         FlightCreateRequestSO flightCreateRequestSO = new FlightCreateRequestSO();
@@ -39,11 +43,20 @@ public class FlightValidator {
             setFlightName(flightSO, flightCreateRequestDetail.getFlightName());
             setSourceName(flightSO, flightCreateRequestDetail.getSourceName());
             setTargetName(flightSO, flightCreateRequestDetail.getTargetName());
+            setFlightType(flightSO, flightCreateRequestDetail.getType());
             flightSOList.add(flightSO);
         }
 
         flightCreateRequestSO.setFlightSOList(flightSOList);
         return flightCreateRequestSO;
+    }
+
+    private void setFlightType(FlightSO flightSO, String type) {
+        Set<String> flightTypeSet = flightConfig.getTypes().stream().collect(Collectors.toSet());
+        if (!flightTypeSet.contains(type)) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "존재하지 않는 타입입니다.");
+        }
+        flightSO.setType(type);
     }
 
     private void setFlightName(FlightSO flightSO, String flightName) {

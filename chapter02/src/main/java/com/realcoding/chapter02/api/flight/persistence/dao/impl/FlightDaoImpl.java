@@ -26,7 +26,7 @@ public class FlightDaoImpl implements FlightDao {
     private static final String GET_ALL_FLIGHT_SQL = "select * from rc_flight where status != 'DELETED'";
     private static final String GET_ALL_FLIGHT_BY_FLIGHT_IDS_SQL = "select * from rc_flight where status != 'DELETED' and flight_id in ( :flightIds )";
     private static final String GET_FLIGHT_BY_FLIGHT_ID_SQL = "select * from rc_flight where flight_id = :flightId and status != 'DELETED'";
-    private static final String INSERT_FLIGHT_SQL = "INSERT INTO rc_flight (flight_id, flight_name, source_name, target_name, status, created_dt, created_by, modified_dt, modified_by) " + "VALUES (:flightId, :flightName, :sourceName, :targetName, :status, :createdDt, :createdBy, :modifiedDt, :modifiedBy)";
+    private static final String INSERT_FLIGHT_SQL = "INSERT INTO rc_flight (flight_id, flight_name, source_name, target_name, type, status, created_dt, created_by, modified_dt, modified_by) " + "VALUES (:flightId, :flightName, :sourceName, :targetName, :type, :status, :createdDt, :createdBy, :modifiedDt, :modifiedBy)";
     private static final String UPDATE_FLIGHT_STATUS_TO_DELETED_SQL = "UPDATE rc_flight SET status = 'DELETED' WHERE flight_id in ( :flightIds ) ";
 
     // autowired

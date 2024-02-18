@@ -17,6 +17,7 @@ public class FlightEntity {
     private String flightName;
     private String sourceName;
     private String targetName;
+    private String type;
     private String status;
     private LocalDateTime createdDt;
     private String createdBy;

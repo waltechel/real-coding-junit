@@ -44,6 +44,7 @@ public class FlightServiceImpl implements FlightService {
                     .flightName(flightSO.getFlightName())
                     .sourceName(flightSO.getSourceName())
                     .targetName(flightSO.getTargetName())
+                    .type(flightSO.getType())
                     .status(ApplicationConstants.CREATED)
                     .createdBy(ApplicationConstants.SYSTEM_ID)
                     .createdDt(LocalDateTime.now())
