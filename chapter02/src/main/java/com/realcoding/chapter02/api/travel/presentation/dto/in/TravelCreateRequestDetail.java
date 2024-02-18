@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class TravelCreateRequestDetail {
 
     private String passengerId;
-    private String flightID;
+    private String flightId;
 
 }

@@ -38,7 +38,7 @@ public class TravelValidator {
             throw new CustomException(ErrorCode.BAD_REQUEST, "적절하지 않은 여행 요청입니다.");
         }
         for (TravelCreateRequestDetail travelCreateRequestDetail : travelCreateRequest.getTravelDetailList()) {
-            if (StringUtils.isEmpty(travelCreateRequestDetail.getFlightID())) {
+            if (StringUtils.isEmpty(travelCreateRequestDetail.getFlightId())) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "항공편 아이디가 없습니다");
             }
             if (StringUtils.isEmpty(travelCreateRequestDetail.getPassengerId())) {
@@ -50,7 +50,7 @@ public class TravelValidator {
         List<TravelCreateRequestSODetail> travelCreateRequestSODetailList = new ArrayList<>();
         for (TravelCreateRequestDetail travelCreateRequestDetail : travelCreateRequest.getTravelDetailList()) {
             TravelCreateRequestSODetail soDetail = new TravelCreateRequestSODetail();
-            FlightSO flightSO = flightService.getFlightDetailByFlightId(travelCreateRequestDetail.getFlightID());
+            FlightSO flightSO = flightService.getFlightDetailByFlightId(travelCreateRequestDetail.getFlightId());
             if (flightSO == null) {
                 throw new CustomException(ErrorCode.NOT_FOUND, "존재하지 않는 항공편입니다.");
             }

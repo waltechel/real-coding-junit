@@ -22,6 +22,7 @@ public class FlightRowMapper implements RowMapper<FlightEntity> {
                 .flightId(rs.getString("FLIGHT_ID"))
                 .flightName(rs.getString("FLIGHT_NAME"))
                 .status(rs.getString("STATUS"))
+                .type(rs.getString("TYPE"))
                 .sourceName(rs.getString("SOURCE_NAME"))
                 .targetName(rs.getString("TARGET_NAME"))
                 .createdDt(rs.getObject("CREATED_DT", LocalDateTime.class))

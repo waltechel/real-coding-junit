@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface PassengerRepository {
+public interface PassengerMybatisRepository {
     List<PassengerEntity> getAllPassengers();
 
     PassengerEntity getPassengerById(String passengerId);

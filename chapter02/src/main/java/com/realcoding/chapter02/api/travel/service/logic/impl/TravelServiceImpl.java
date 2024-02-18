@@ -28,8 +28,6 @@ import java.util.List;
 public class TravelServiceImpl implements TravelService {
 
     private final TravelDao travelDao;
-    private final PassengerDao passengerDao;
-    private final FlightDao flightDao;
     private final TravelServiceConverter travelServiceConverter;
 
     @Override
@@ -40,18 +38,8 @@ public class TravelServiceImpl implements TravelService {
     @Override
     public List<TravelSO> createTravelList(TravelCreateRequestSO travelCreateRequestSO) {
         List<TravelEntity> travelEntityList = new ArrayList<>();
-        for (TravelCreateRequestSODetail soDetail : travelCreateRequestSO.getTravelDetailSOList()) {
-            PassengerEntity passengerEntity = passengerDao.getPassengerById(soDetail.getPassengerSO().getPassengerId());
-            FlightEntity flightEntity = flightDao.getFlightEntityByFlightId(soDetail.getFlightSO().getFlightId());
-            TravelEntity travelEntity = TravelEntity.builder()
-                    .travelId(RCIdGenerator.generateId(DomainEnum.TRAVEL))
-                    .status(ApplicationConstants.CREATED)
-                    .passenger(passengerEntity)
-                    .flight(flightEntity)
-                    .build();
-            travelEntityList.add(travelEntity);
-        }
-        travelEntityList = travelDao.saveAllTravelList(travelEntityList);
+
+        travelEntityList = travelDao.saveAllTravelList(travelCreateRequestSO);
         List<TravelSO> travelSOList = travelServiceConverter.toTravelSOList(travelEntityList);
         return travelSOList;
     }

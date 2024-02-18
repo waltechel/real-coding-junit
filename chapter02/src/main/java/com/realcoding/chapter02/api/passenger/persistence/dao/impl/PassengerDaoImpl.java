@@ -4,7 +4,7 @@ import com.realcoding.chapter02.api.common.exception.CustomException;
 import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.passenger.persistence.dao.PassengerDao;
 import com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity;
-import com.realcoding.chapter02.api.passenger.persistence.repository.PassengerRepository;
+import com.realcoding.chapter02.api.passenger.persistence.repository.PassengerMybatisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PassengerDaoImpl implements PassengerDao {
 
-    private final PassengerRepository passengerRepository;
+    private final PassengerMybatisRepository passengerRepository;
 
     @Override
     public List<PassengerEntity> getAllPassengers() {
