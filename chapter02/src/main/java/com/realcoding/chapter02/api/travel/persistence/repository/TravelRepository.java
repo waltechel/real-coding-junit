@@ -12,20 +12,23 @@ public interface TravelRepository extends JpaRepository<TravelEntity, String> {
     // findAllTravelList() 메서드에 fetch join 적용
     @Query("SELECT distinct t FROM rc_travel t " +
             "JOIN FETCH t.flight f " +
-            "JOIN FETCH t.passenger p")
+            "JOIN FETCH t.passenger p " +
+            "WHERE t.status != 'DELETED' ")
     List<TravelEntity> findAllTravelList();
 
     // findByTravelId() 메서드에 fetch join 적용
     @Query("SELECT distinct t FROM rc_travel t " +
             "JOIN FETCH t.flight f " +
             "JOIN FETCH t.passenger p " +
-            "WHERE t.travelId = :travelId")
+            "WHERE t.travelId = :travelId " +
+            "AND t.status != 'DELETED' ")
     TravelEntity findByTravelId(@Param("travelId") String travelId);
 
     // findAllByTravelIds() 메소드에 fetch join 적용
     @Query("SELECT distinct t FROM rc_travel t " +
             "JOIN FETCH t.flight f " +
             "JOIN FETCH t.passenger p " +
-            "WHERE t.travelId IN :travelIds")
+            "WHERE t.travelId IN :travelIds " +
+            "AND t.status != 'DELETED' ")
     List<TravelEntity> findAllByTravelIds(@Param("travelIds") List<String> travelIds);
 }
