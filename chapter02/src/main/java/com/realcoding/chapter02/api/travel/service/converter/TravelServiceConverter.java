@@ -12,4 +12,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {FlightServiceConverter.class, PassengerServiceConverter.class})
 public interface TravelServiceConverter {
     List<TravelSO> toTravelSOList(List<TravelEntity> travelEntityList);
+
+    TravelSO toTravelSO(TravelEntity travelEntity);
 }

@@ -2,6 +2,8 @@ package com.realcoding.chapter02.api.travel.service.logic.impl;
 
 import com.realcoding.chapter02.api.common.code.ApplicationConstants;
 import com.realcoding.chapter02.api.common.code.DomainEnum;
+import com.realcoding.chapter02.api.common.exception.CustomException;
+import com.realcoding.chapter02.api.common.exception.ErrorCode;
 import com.realcoding.chapter02.api.common.util.RCIdGenerator;
 import com.realcoding.chapter02.api.flight.persistence.dao.FlightDao;
 import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
@@ -32,25 +34,31 @@ public class TravelServiceImpl implements TravelService {
 
     @Override
     public List<TravelSO> getListAllTravel() {
-        return null;
+        List<TravelEntity> travelEntityList = travelDao.getListAllTravel();
+        List<TravelSO> travelSOList = travelServiceConverter.toTravelSOList(travelEntityList);
+        return travelSOList;
     }
 
     @Override
     public List<TravelSO> createTravelList(TravelCreateRequestSO travelCreateRequestSO) {
-        List<TravelEntity> travelEntityList = new ArrayList<>();
-
-        travelEntityList = travelDao.saveAllTravelList(travelCreateRequestSO);
+        List<TravelEntity> travelEntityList = travelDao.saveAllTravelList(travelCreateRequestSO);
         List<TravelSO> travelSOList = travelServiceConverter.toTravelSOList(travelEntityList);
         return travelSOList;
     }
 
     @Override
     public TravelSO getTravelDetailByTravelId(String travelId) {
-        return null;
+        TravelEntity travelEntity = travelDao.getTravelDetailByTravelId(travelId);
+        TravelSO travelSO = travelServiceConverter.toTravelSO(travelEntity);
+        return travelSO;
     }
 
     @Override
     public int deleteTravelList(List<String> travelIds) {
-        return 0;
+        int ret = travelDao.updateAsDeletedByTravelIds(travelIds);
+        if (ret != travelIds.size()) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "정상적으로 삭제되지 않은 여행이 있습니다.");
+        }
+        return ret;
     }
 }

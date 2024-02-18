@@ -17,9 +17,5 @@ public class FlightDTO {
     private String flightName;
     private String sourceName;
     private String targetName;
-    private String status;
     private String type;
-    private LocalDateTime createdDt;
-    private LocalDateTime modifiedDt;
-
 }

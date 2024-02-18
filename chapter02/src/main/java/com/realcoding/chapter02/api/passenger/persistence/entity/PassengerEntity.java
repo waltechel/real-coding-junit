@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Builder
-@Entity // JPA 엔티티임을 나타냄
+@Entity(name = "rc_passenger") // JPA 엔티티임을 나타냄
 public class PassengerEntity {
 
     @Id // 기본 키임을 나타냄

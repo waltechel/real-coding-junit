@@ -15,10 +15,5 @@ public class PassengerDTO {
     private String passengerId;
     private String passengerRRN;
     private String name;
-    private String status;
     private String type;
-    private LocalDateTime createdDt;
-    private String createdBy;
-    private LocalDateTime modifiedDt;
-    private String modifiedBy;
 }

@@ -23,13 +23,8 @@ public class TravelDTO {
 
     private String travelId;
 
-    private String status;
-
     private FlightDTO flight;
 
     private PassengerDTO passenger;
 
-    private LocalDateTime createdDt;
-
-    private LocalDateTime modifiedDt;
 }

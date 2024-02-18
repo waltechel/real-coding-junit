@@ -7,4 +7,10 @@ import java.util.List;
 
 public interface TravelDao {
     List<TravelEntity> saveAllTravelList(TravelCreateRequestSO travelEntityList);
+
+    List<TravelEntity> getListAllTravel();
+
+    TravelEntity getTravelDetailByTravelId(String travelId);
+
+    int updateAsDeletedByTravelIds(List<String> travelIds);
 }

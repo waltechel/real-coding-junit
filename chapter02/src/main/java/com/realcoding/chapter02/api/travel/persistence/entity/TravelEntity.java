@@ -6,12 +6,14 @@ import com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "rc_travel")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class TravelEntity extends BaseEntity {
 
     @Id
