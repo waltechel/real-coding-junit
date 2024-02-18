@@ -59,7 +59,8 @@ public class TravelValidator {
                 throw new CustomException(ErrorCode.NOT_FOUND, "존재하지 않는 승객입니다.");
             }
             // 비즈니스 항공편에 일반 승객은 여행할 수 없다
-            if (StringUtils.equals(ApplicationConstants.FLIGHT_TYPE_BUSINESS, flightSO.getType())) {
+            if (StringUtils.equals(ApplicationConstants.FLIGHT_TYPE_BUSINESS, flightSO.getType()) &&
+                StringUtils.equals(ApplicationConstants.PASSENGER_TYPE_REGULAR, passengerSO.getType())) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "비즈니스 항공편에 일반 승객은 여행할 수 없습니다.");
             }
             soDetail.setFlightSO(flightSO);
