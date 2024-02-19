@@ -16,6 +16,7 @@ public class ApplicationConstants {
     public static final String FLIGHT_TYPE_BUSINESS = "BUSINESS";
     public static final String FLIGHT_TYPE_ECONOMY = "ECONOMY";
     public static final String PASSENGER_TYPE_REGULAR = "REGULAR";
-    public static final String PASSEGNER_TYPE_VIP = "VIP";
+    public static final String PASSENGER_TYPE_VIP = "VIP";
 
+    public static final String URL_PREFIX_RC = "/rc";
 }

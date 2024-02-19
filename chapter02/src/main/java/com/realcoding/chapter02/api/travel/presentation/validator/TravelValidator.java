@@ -3,7 +3,6 @@ package com.realcoding.chapter02.api.travel.presentation.validator;
 import com.realcoding.chapter02.api.common.code.ApplicationConstants;
 import com.realcoding.chapter02.api.common.exception.CustomException;
 import com.realcoding.chapter02.api.common.exception.ErrorCode;
-import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
 import com.realcoding.chapter02.api.flight.service.logic.FlightService;
 import com.realcoding.chapter02.api.flight.service.so.FlightSO;
 import com.realcoding.chapter02.api.passenger.service.logic.PassengerService;
@@ -96,7 +95,7 @@ public class TravelValidator {
             if (StringUtils.equals(ApplicationConstants.FLIGHT_TYPE_BUSINESS, travelEntity.getFlight().getType())) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "비즈니스 항공편을 이용한 여행은 삭제가 불가능합니다");
             }
-            if (StringUtils.equals(ApplicationConstants.PASSEGNER_TYPE_VIP, travelEntity.getPassenger().getType())) {
+            if (StringUtils.equals(ApplicationConstants.PASSENGER_TYPE_VIP, travelEntity.getPassenger().getType())) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "VIP 승객의 여행은 삭제가 불가능합니다");
             }
         }
