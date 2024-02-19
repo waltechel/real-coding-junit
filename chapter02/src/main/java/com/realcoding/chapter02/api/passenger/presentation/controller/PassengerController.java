@@ -46,11 +46,12 @@ public class PassengerController {
 
 
     @PutMapping("/update/{passengerId}")
-    public ResponseEntity<PassengerSO> updatePassengerType(@PathVariable String passengerId,
+    public ResponseEntity<PassengerDTO> updatePassengerType(@PathVariable String passengerId,
                                                            @RequestBody PassengerUpdateTypeRequest request) {
         passengerValidator.validateUpdatePassengerType(passengerId, request.getType());
         PassengerSO passengerSO = passengerService.updatePassengerType(passengerId, request.getType());
-        return ResponseEntity.ok(passengerSO);
+        PassengerDTO passengerDTO = passengerControllerConverter.toPassengerDTO(passengerSO);
+        return ResponseEntity.ok(passengerDTO);
     }
 
     @DeleteMapping("/delete")
