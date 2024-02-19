@@ -90,4 +90,15 @@ public class TravelDaoImpl implements TravelDao {
         }
         return ret;
     }
+
+    @Override
+    public List<TravelEntity> getListAllTravelByTravelIds(List<String> travelIds) {
+        List<TravelEntity> ret = new ArrayList<>();
+        try {
+            ret = travelRepository.findAllByTravelIds(travelIds);
+        } catch (RuntimeException re) {
+            log.error("PassengerDaoImpl > getListAllPassengersByPassengerIds has error!", re);
+        }
+        return ret;
+    }
 }

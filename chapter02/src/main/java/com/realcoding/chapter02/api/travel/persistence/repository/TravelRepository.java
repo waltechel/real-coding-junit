@@ -31,4 +31,5 @@ public interface TravelRepository extends JpaRepository<TravelEntity, String> {
             "WHERE t.travelId IN :travelIds " +
             "AND t.status != 'DELETED' ")
     List<TravelEntity> findAllByTravelIds(@Param("travelIds") List<String> travelIds);
+
 }

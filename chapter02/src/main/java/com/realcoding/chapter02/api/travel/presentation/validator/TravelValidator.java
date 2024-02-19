@@ -3,10 +3,13 @@ package com.realcoding.chapter02.api.travel.presentation.validator;
 import com.realcoding.chapter02.api.common.code.ApplicationConstants;
 import com.realcoding.chapter02.api.common.exception.CustomException;
 import com.realcoding.chapter02.api.common.exception.ErrorCode;
+import com.realcoding.chapter02.api.flight.persistence.entity.FlightEntity;
 import com.realcoding.chapter02.api.flight.service.logic.FlightService;
 import com.realcoding.chapter02.api.flight.service.so.FlightSO;
 import com.realcoding.chapter02.api.passenger.service.logic.PassengerService;
 import com.realcoding.chapter02.api.passenger.service.so.PassengerSO;
+import com.realcoding.chapter02.api.travel.persistence.dao.TravelDao;
+import com.realcoding.chapter02.api.travel.persistence.entity.TravelEntity;
 import com.realcoding.chapter02.api.travel.presentation.dto.in.TravelCreateRequest;
 import com.realcoding.chapter02.api.travel.presentation.dto.in.TravelCreateRequestDetail;
 import com.realcoding.chapter02.api.travel.presentation.dto.in.TravelDeleteRequest;
@@ -26,6 +29,7 @@ import java.util.List;
 @Slf4j
 public class TravelValidator {
 
+    private final TravelDao travelDao;
     private final PassengerService passengerService;
     private final FlightService flightService;
 
@@ -60,7 +64,7 @@ public class TravelValidator {
             }
             // 비즈니스 항공편에 일반 승객은 여행할 수 없다
             if (StringUtils.equals(ApplicationConstants.FLIGHT_TYPE_BUSINESS, flightSO.getType()) &&
-                StringUtils.equals(ApplicationConstants.PASSENGER_TYPE_REGULAR, passengerSO.getType())) {
+                    StringUtils.equals(ApplicationConstants.PASSENGER_TYPE_REGULAR, passengerSO.getType())) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "비즈니스 항공편에 일반 승객은 여행할 수 없습니다.");
             }
             soDetail.setFlightSO(flightSO);
@@ -73,7 +77,31 @@ public class TravelValidator {
     }
 
     public List<String> deleteRequestValidate(TravelDeleteRequest travelDeleteRequest) {
-        return travelDeleteRequest.getTravelIds();
+        if (CollectionUtils.isEmpty(travelDeleteRequest.getTravelIds())) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "삭제할 여행 아이디가 없습니다.");
+        }
+        for (String travelId : travelDeleteRequest.getTravelIds()) {
+            if (StringUtils.isEmpty(travelId)) {
+                throw new CustomException(ErrorCode.BAD_REQUEST, "삭제할 여행 아이디가 없습니다.");
+            }
+        }
+        List<String> travelIds = travelDeleteRequest.getTravelIds();
+
+        List<TravelEntity> travelEntityList = travelDao.getListAllTravelByTravelIds(travelIds);
+        if (travelEntityList.size() != travelIds.size()) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "적절하지 않은 여행 아이디가 있습니다");
+        }
+
+        for (TravelEntity travelEntity : travelEntityList) {
+            if (StringUtils.equals(ApplicationConstants.FLIGHT_TYPE_BUSINESS, travelEntity.getFlight().getType())) {
+                throw new CustomException(ErrorCode.BAD_REQUEST, "비즈니스 항공편을 이용한 여행은 삭제가 불가능합니다");
+            }
+            if (StringUtils.equals(ApplicationConstants.PASSEGNER_TYPE_VIP, travelEntity.getPassenger().getType())) {
+                throw new CustomException(ErrorCode.BAD_REQUEST, "VIP 승객의 여행은 삭제가 불가능합니다");
+            }
+        }
+
+        return travelIds;
 
     }
 }
