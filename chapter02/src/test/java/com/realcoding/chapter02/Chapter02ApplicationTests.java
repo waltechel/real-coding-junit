@@ -161,7 +161,7 @@ class Chapter02ApplicationTests {
 				passengerDetailList.add(PassengerCreateRequestDetail.builder()
 						.passengerRRN("910505-2222222")
 						.name("성춘향")
-						.type(ApplicationConstants.PASSEGNER_TYPE_VIP)
+						.type(ApplicationConstants.PASSENGER_TYPE_VIP)
 						.build());
 				passengerCreateRequest.setPassengerDetailList(passengerDetailList);
 
@@ -328,7 +328,7 @@ class Chapter02ApplicationTests {
 				passengerDetailList.add(PassengerCreateRequestDetail.builder()
 						.passengerRRN("910505-2222222")
 						.name("성춘향")
-						.type(ApplicationConstants.PASSEGNER_TYPE_VIP)
+						.type(ApplicationConstants.PASSENGER_TYPE_VIP)
 						.build());
 				passengerCreateRequest.setPassengerDetailList(passengerDetailList);
 
