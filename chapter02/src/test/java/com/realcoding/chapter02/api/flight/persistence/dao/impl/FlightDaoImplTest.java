@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @JdbcTest
@@ -66,9 +67,10 @@ class FlightDaoImplTest {
 
 	@Test
 	void getListAllFlightByFlightIds() {
-		List<String> flightIds = new ArrayList<>();
-		flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-		flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+		List<String> flightIds = Arrays.asList(
+				"FLIGHT-ov3bks8mbqhbbggekduevduomi",
+				"FLIGHT-bp2cvqov33019rpjik00cu497g"
+		);
 		// 쿼리 실행
 		List<FlightEntity> flightEntities = flightDao.getListAllFlightByFlightIds(flightIds);
 		Assertions.assertEquals(flightEntities.size(), 2);
@@ -76,9 +78,10 @@ class FlightDaoImplTest {
 
 	@Test
 	void updateAsDeletedByFlightIds() {
-		List<String> flightIds = new ArrayList<>();
-		flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-		flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+		List<String> flightIds = Arrays.asList(
+				"FLIGHT-ov3bks8mbqhbbggekduevduomi",
+				"FLIGHT-bp2cvqov33019rpjik00cu497g"
+		);
 		// 쿼리 실행
 		int ret = flightDao.updateAsDeletedByFlightIds(flightIds);
 		Assertions.assertEquals(ret, 2);

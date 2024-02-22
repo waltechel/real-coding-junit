@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @JdbcTest
@@ -74,9 +75,10 @@ class FlightDaoImplTest2 {
     @Test
     void getListAllFlightByFlightIds() {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        List<String> flightIds = new ArrayList<>();
-        flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-        flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+        List<String> flightIds = Arrays.asList(
+                "FLIGHT-ov3bks8mbqhbbggekduevduomi",
+                "FLIGHT-bp2cvqov33019rpjik00cu497g"
+        );
         parameters.addValue("flightIds", flightIds);
         // 쿼리 실행
         List<FlightEntity> flightEntities = namedParameterJdbcTemplate.query(GET_ALL_FLIGHT_BY_FLIGHT_IDS_SQL, parameters, FLIGHT_ROW_MAPPER);
@@ -86,9 +88,10 @@ class FlightDaoImplTest2 {
     @Test
     void updateAsDeletedByFlightIds() {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        List<String> flightIds = new ArrayList<>();
-        flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-        flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+        List<String> flightIds = Arrays.asList(
+                "FLIGHT-ov3bks8mbqhbbggekduevduomi",
+                "FLIGHT-bp2cvqov33019rpjik00cu497g"
+        );
         parameters.addValue("flightIds", flightIds);
         // 쿼리 실행
         int ret = namedParameterJdbcTemplate.update(UPDATE_FLIGHT_STATUS_TO_DELETED_SQL, parameters);
