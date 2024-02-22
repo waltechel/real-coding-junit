@@ -12,11 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
@@ -28,72 +24,63 @@ import java.util.List;
 @Import(TestBeanConfig.class)
 class FlightDaoImplTest {
 
-    private static final String GET_ALL_FLIGHT_SQL = "select * from rc_flight where status != 'DELETED'";
-    private static final String GET_ALL_FLIGHT_BY_FLIGHT_IDS_SQL = "select * from rc_flight where status != 'DELETED' and flight_id in ( :flightIds )";
-    private static final String GET_FLIGHT_BY_FLIGHT_ID_SQL = "select * from rc_flight where flight_id = :flightId and status != 'DELETED'";
-    private static final String INSERT_FLIGHT_SQL = "INSERT INTO rc_flight (flight_id, flight_name, source_name, target_name, type, status, created_dt, created_by, modified_dt, modified_by) " + "VALUES (:flightId, :flightName, :sourceName, :targetName, :type, :status, :createdDt, :createdBy, :modifiedDt, :modifiedBy)";
-    private static final String UPDATE_FLIGHT_STATUS_TO_DELETED_SQL = "UPDATE rc_flight SET status = 'DELETED' WHERE flight_id in ( :flightIds ) ";
+	private FlightRowMapper FLIGHT_ROW_MAPPER;
+	private FlightDao flightDao;
 
-    private FlightRowMapper FLIGHT_ROW_MAPPER = new FlightRowMapper();
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    @Qualifier("businessFlightEntity")
-    private FlightEntity businessFlightEntity;
-    @Autowired
-    @Qualifier("economyFlightEntity")
-    private FlightEntity economyFlightEntity;
+	@Autowired
+	public FlightDaoImplTest(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
+		this.FLIGHT_ROW_MAPPER = new FlightRowMapper();
+		this.flightDao = new FlightDaoImpl(FLIGHT_ROW_MAPPER, namedParameterJdbcTemplate, jdbcTemplate);
+	}
 
-    @Test
-    void getListAllFlight() {
-        List<FlightEntity> flightEntityList = jdbcTemplate.query(GET_ALL_FLIGHT_SQL, FLIGHT_ROW_MAPPER);
-        Assertions.assertEquals(flightEntityList.size(), 2);
-    }
+	@Autowired
+	@Qualifier("businessFlightEntity")
+	private FlightEntity businessFlightEntity;
+	@Autowired
+	@Qualifier("economyFlightEntity")
+	private FlightEntity economyFlightEntity;
 
-    @Test
-    void saveAllFlightList() {
-        List<FlightEntity> flightEntityList = new ArrayList<>();
-        flightEntityList.add(economyFlightEntity);
-        flightEntityList.add(businessFlightEntity);
-        SqlParameterSource[] batchArgs = SqlParameterSourceUtils.createBatch(flightEntityList.toArray());
-        int[] ret = namedParameterJdbcTemplate.batchUpdate(INSERT_FLIGHT_SQL, batchArgs);
-        Assertions.assertAll("결괏값 검증",
-                () -> Assertions.assertEquals(ret[0], 1),
-                () -> Assertions.assertEquals(ret[1], 1)
-        );
-    }
+	@Test
+	void getListAllFlight() {
+		List<FlightEntity> flightEntityList = flightDao.getListAllFlight();
+		Assertions.assertEquals(flightEntityList.size(), 2);
+	}
 
-    @Test
-    void getFlightEntityByFlightId() {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("flightId", "FLIGHT-ov3bks8mbqhbbggekduevduomi");
-        FlightEntity flightEntity = namedParameterJdbcTemplate.queryForObject(GET_FLIGHT_BY_FLIGHT_ID_SQL, parameters, FLIGHT_ROW_MAPPER);
-        Assertions.assertNotNull(flightEntity);
-    }
+	@Test
+	void saveAllFlightList() {
+		List<FlightEntity> flightEntityList = new ArrayList<>();
+		flightEntityList.add(economyFlightEntity);
+		flightEntityList.add(businessFlightEntity);
+		List<FlightEntity> ret = flightDao.saveAllFlightList(flightEntityList);
+		Assertions.assertAll("결괏값 검증",
+				() -> Assertions.assertEquals(ret, flightEntityList),
+				() -> Assertions.assertEquals(ret.size(), flightEntityList.size())
+		);
+	}
 
-    @Test
-    void getListAllFlightByFlightIds() {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        List<String> flightIds = new ArrayList<>();
-        flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-        flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
-        parameters.addValue("flightIds", flightIds);
-        // 쿼리 실행
-        List<FlightEntity> flightEntities = namedParameterJdbcTemplate.query(GET_ALL_FLIGHT_BY_FLIGHT_IDS_SQL, parameters, FLIGHT_ROW_MAPPER);
-        Assertions.assertEquals(flightEntities.size(), 2);
-    }
+	@Test
+	void getFlightEntityByFlightId() {
+		FlightEntity flightEntity = flightDao.getFlightEntityByFlightId("FLIGHT-ov3bks8mbqhbbggekduevduomi");
+		Assertions.assertNotNull(flightEntity);
+	}
 
-    @Test
-    void updateAsDeletedByFlightIds() {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        List<String> flightIds = new ArrayList<>();
-        flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
-        flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
-        parameters.addValue("flightIds", flightIds);
-        // 쿼리 실행
-        int ret = namedParameterJdbcTemplate.update(UPDATE_FLIGHT_STATUS_TO_DELETED_SQL, parameters);
-        Assertions.assertEquals(ret, 2);
-    }
+	@Test
+	void getListAllFlightByFlightIds() {
+		List<String> flightIds = new ArrayList<>();
+		flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
+		flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+		// 쿼리 실행
+		List<FlightEntity> flightEntities = flightDao.getListAllFlightByFlightIds(flightIds);
+		Assertions.assertEquals(flightEntities.size(), 2);
+	}
+
+	@Test
+	void updateAsDeletedByFlightIds() {
+		List<String> flightIds = new ArrayList<>();
+		flightIds.add("FLIGHT-ov3bks8mbqhbbggekduevduomi");
+		flightIds.add("FLIGHT-bp2cvqov33019rpjik00cu497g");
+		// 쿼리 실행
+		int ret = flightDao.updateAsDeletedByFlightIds(flightIds);
+		Assertions.assertEquals(ret, 2);
+	}
 }
