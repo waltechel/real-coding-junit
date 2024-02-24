@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
+    // Jacoco 플러그인 추가
+    id 'jacoco'
 }
 
 compileJava.options.encoding = "UTF-8"
@@ -62,6 +64,22 @@ dependencies {
 
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+    finalizedBy jacocoTestReport // 테스트 실행 후 Jacoco 보고서 생성
+}
+
+jacoco {
+    toolVersion = "0.8.7" // Jacoco 버전 지정 (필요에 따라 변경)
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
+    }
 }
