@@ -2,6 +2,7 @@ package com.realcoding.chapter02.api.passenger.persistence.repository;
 
 import com.realcoding.chapter02.api.passenger.persistence.entity.PassengerEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface PassengerMybatisRepository {
 
     List<PassengerEntity> getAllPassengersByPassengerIds(List<String> collect);
 
-    void updatePassengerType(String passengerId, String type);
+    void updatePassengerType(@Param("passengerId") String passengerId, @Param("type") String type);
 
     int updateAsDeletedByPassengerIds(List<String> passengerIds);
 
