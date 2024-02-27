@@ -46,7 +46,7 @@ public class FlightController {
     }
 
     @GetMapping("/detail/{flightId}")
-    public ResponseEntity<FlightDTO> getFlightDetail(@PathVariable String flightId) {
+    public ResponseEntity<FlightDTO> getFlightDetail(@PathVariable(name = "flightId") String flightId) {
         FlightSO flightSO = flightService.getFlightDetailByFlightId(flightId);
         FlightDTO flightDTO = flightControllerConverter.toFlightDTO(flightSO);
         return ResponseEntity.ok(flightDTO);
